@@ -6,6 +6,9 @@ public class Restaurant {
     private String name;
     private List<Dish> menu;
 
+    public Restaurant() {
+    }
+
     public List<Dish> getMenu() {
         return menu;
     }
