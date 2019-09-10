@@ -16,10 +16,6 @@ public class MockRestaurantRepository {
         this.list = list;
     }
 
-    public void setList(List<Restaurant> list) {
-        this.list = list;
-    }
-
     public List<Restaurant> getAll() {
         return list;
     }

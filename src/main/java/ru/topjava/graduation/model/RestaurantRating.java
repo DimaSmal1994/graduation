@@ -1,18 +1,30 @@
 package ru.topjava.graduation.model;
 
-import java.util.Map;
-
 public class RestaurantRating {
-    private static Map<String, Integer> ratings;
+    private String restaurantName;
+    private Integer rating;
 
-    public static Map<String, Integer> getRatings() {
-        return ratings;
+    public RestaurantRating() {
     }
 
-    public static void addVote(String restaurantName) {
-        if (ratings.containsKey(restaurantName)) {
-            ratings.put(restaurantName, ratings.get(restaurantName) + 1);
-        }
+    public RestaurantRating(String restaurantName, Integer rating) {
+        this.restaurantName = restaurantName;
+        this.rating = rating;
     }
 
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
 }
