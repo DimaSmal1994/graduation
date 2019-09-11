@@ -4,15 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Restaurant {
+    private Integer id;
     private String name;
     private List<Dish> menu;
 
     public Restaurant() {
     }
 
-    public Restaurant(String name) {
+    public Restaurant(Integer id, String name, List<Dish> menu) {
+        this.id = id;
         this.name = name;
-        this.menu = new ArrayList<>();
+        this.menu = menu;
+    }
+
+    public Restaurant(String name, List<Dish> menu) {
+        this.name = name;
+        this.menu = menu;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public List<Dish> getMenu() {
