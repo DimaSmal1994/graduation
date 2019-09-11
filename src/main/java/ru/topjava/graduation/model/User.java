@@ -1,14 +1,41 @@
 package ru.topjava.graduation.model;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(
+        name = "users_unique_email_idx", columnNames = "email")})
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "emal", nullable = false, unique = true)
+    @Email
+    @NotBlank
     private String email;
+
+    @Column(name = "password", nullable = false)
+    @NotBlank
     private String password;
+
+    @OneToMany(mappedBy = "user")
     private List<UserVote> votes;
+
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @BatchSize(size = 100)
     private Set<Role> roles;
 
     public User() {
@@ -62,5 +89,17 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", votes=" + votes +
+                ", roles=" + roles +
+                '}';
     }
 }
