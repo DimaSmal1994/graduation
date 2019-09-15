@@ -1,13 +1,14 @@
 package ru.topjava.graduation.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import ru.topjava.graduation.HasId;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "restaurants")
-public class Restaurant {
+public class Restaurant implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,10 +34,12 @@ public class Restaurant {
         this.menu = menu;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

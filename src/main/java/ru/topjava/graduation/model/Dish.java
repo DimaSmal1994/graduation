@@ -3,6 +3,7 @@ package ru.topjava.graduation.model;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.NotBlank;
+import ru.topjava.graduation.HasId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(
         columnNames = {"id", "restaurant_id"}, name = "dishes_unique_id_restaurant_id_idx")})
-public class Dish {
+public class Dish  implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -61,10 +62,12 @@ public class Dish {
         this.price = price;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }

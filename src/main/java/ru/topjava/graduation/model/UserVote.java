@@ -2,6 +2,7 @@ package ru.topjava.graduation.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import ru.topjava.graduation.HasId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +12,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "user_votes", uniqueConstraints = {@UniqueConstraint(
         name = "user_votes_unique_user_date_idx", columnNames = {"user_id", "date"})})
-public class UserVote {
+public class UserVote implements HasId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -37,25 +38,25 @@ public class UserVote {
     public UserVote() {
     }
 
-    public UserVote(LocalDate date, LocalTime time, Restaurant restaurant, User user) {
+    public UserVote(LocalDate date, LocalTime time, Restaurant restaurant) {
         this.date = date;
         this.time = time;
         this.restaurant = restaurant;
-        this.user = user;
     }
 
-    public UserVote(Integer id, LocalDate date, LocalTime time, Restaurant restaurant, User user) {
+    public UserVote(Integer id, LocalDate date, LocalTime time, Restaurant restaurant) {
         this.id = id;
         this.date = date;
         this.time = time;
         this.restaurant = restaurant;
-        this.user = user;
     }
 
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
