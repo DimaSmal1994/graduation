@@ -1,49 +1,51 @@
 package ru.topjava.graduation.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import ru.topjava.graduation.model.Restaurant;
-import ru.topjava.graduation.repository.MockRestaurantRepository;
+import ru.topjava.graduation.repository.RestaurantRepository;
+import ru.topjava.graduation.util.ValidationUtil;
 
 import java.util.List;
 
+@Service
 public class RestaurantService {
-    private MockRestaurantRepository repository;
+
+    private RestaurantRepository repository;
+
+    @Autowired
+    public void setRepository(RestaurantRepository repository) {
+        this.repository = repository;
+    }
 
     public RestaurantService() {
     }
 
-    public RestaurantService(MockRestaurantRepository repository) {
-        this.repository = repository;
+    @Transactional
+    public Restaurant save(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
+        return repository.save(restaurant);
     }
 
-    public void setRepository(MockRestaurantRepository repository) {
-        this.repository = repository;
+    @Transactional
+    public void delete(Integer id) {
+        ValidationUtil.checkNotFoundWithId(repository.existsById(id), id);
+        repository.deleteById(id);
+
     }
 
-    public Restaurant create(Restaurant restaurant) {
-        Restaurant result;
-        if (restaurant != null && restaurant.getName() != null) {
-            result = repository.save(restaurant);
-        } else {
-            result = null;
-        }
-
-        return result;
-    }
-
-    public void delete(Restaurant restaurant) {
-        if (restaurant != null && repository.getByName(restaurant.getName()) != null) {
-            repository.delete(restaurant);
-        }
-    }
-
+    @Transactional
     public List<Restaurant> getAll() {
-        return repository.getAll();
+        return repository.findAll();
     }
 
+    @Transactional
     public Restaurant getByName(String name) {
         Restaurant result;
         if (name != null) {
-            result = repository.getByName(name);
+            result = repository.findByNameIsLike(name);
         } else {
             result = null;
         }
@@ -51,6 +53,7 @@ public class RestaurantService {
         return result;
     }
 
+    @Transactional
     public void update(Restaurant restaurant) {
         if (restaurant != null) {
             repository.save(restaurant);
