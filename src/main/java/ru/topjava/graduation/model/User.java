@@ -20,7 +20,7 @@ public class User implements HasId {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "emal", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
     private String email;
