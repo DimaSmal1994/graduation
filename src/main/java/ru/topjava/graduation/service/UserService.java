@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User userFound = repository.findByEmailIsLike(email);
+        User userFound = repository.findByEmailIsLike(email.toLowerCase());
         if (userFound == null) {
             throw new UsernameNotFoundException("User " + email + " not found");
         }

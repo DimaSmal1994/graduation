@@ -1,5 +1,6 @@
 package ru.topjava.graduation.model;
 
+import org.hibernate.annotations.Fetch;
 import org.hibernate.validator.constraints.NotBlank;
 import ru.topjava.graduation.HasId;
 

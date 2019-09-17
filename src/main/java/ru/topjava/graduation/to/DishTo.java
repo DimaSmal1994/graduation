@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DishTo implements Serializable, HasId {
-    //TODO проверить методы в ТО и прикрутить в сервисы(?)
 
     private static final long serialVersionUID = 1L;
 

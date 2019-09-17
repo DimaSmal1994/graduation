@@ -6,12 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.topjava.graduation.model.Restaurant;
 import ru.topjava.graduation.repository.RestaurantRepository;
-import ru.topjava.graduation.util.ValidationUtil;
 
 import java.util.List;
 
+import static ru.topjava.graduation.util.ValidationUtil.*;
+
 @Service
 public class RestaurantService {
+    //TODO ПЕРЕПИЛИТЬ ВСЕ ВОЗВРАЩАЕМЫЕ ОБЪЕКТЫ НА ТО
 
     private RestaurantRepository repository;
 
@@ -31,9 +33,8 @@ public class RestaurantService {
 
     @Transactional
     public void delete(Integer id) {
-        ValidationUtil.checkNotFoundWithId(repository.existsById(id), id);
+        checkNotFoundWithId(repository.existsById(id), id);
         repository.deleteById(id);
-
     }
 
     @Transactional
@@ -43,20 +44,19 @@ public class RestaurantService {
 
     @Transactional
     public Restaurant getByName(String name) {
-        Restaurant result;
-        if (name != null) {
-            result = repository.findByNameIsLike(name);
-        } else {
-            result = null;
-        }
-
-        return result;
+        Assert.notNull(name, "restaurant name must not be null");
+        return checkNotFound(repository.findByNameIsLike(name), "with name=" + name);
     }
 
     @Transactional
-    public void update(Restaurant restaurant) {
-        if (restaurant != null) {
-            repository.save(restaurant);
-        }
+    public Restaurant update(Restaurant restaurant) {
+        Assert.notNull(restaurant, "restaurant must not be null");
+        return checkIsNotFoundWithId(repository.save(restaurant), restaurant.getId());
+    }
+
+    @Transactional
+    public Restaurant getById(int id) {
+        Restaurant restaurant = repository.findById(id).orElse(null);
+        return checkIsNotFoundWithId(restaurant, id);
     }
 }

@@ -32,7 +32,7 @@ public class UserVoteService {
     }
 
     @Transactional
-    public UserVote save(UserVote userVote, Integer userId) {
+    public UserVote save(UserVote userVote, int userId) {
         Assert.notNull(userVote, "userVote must not be null");
         userVote.setUser(userRepository.getOne(userId));
         return checkIsNotFoundWithId(userVoteRepository.save(userVote), userId);
