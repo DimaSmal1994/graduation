@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.topjava.graduation.model.UserVote;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserVoteRepository extends JpaRepository<UserVote, Integer> {
@@ -20,4 +21,8 @@ public interface UserVoteRepository extends JpaRepository<UserVote, Integer> {
     @Query(value = "select uv from UserVote uv LEFT JOIN FETCH uv.user as users LEFT JOIN FETCH uv.restaurant AS" +
             " restaurants where uv.user.id=:userId order by uv.date")
     List<UserVote> findAllOrderByDate(@Param("userId") int userId);
+
+    @Query(value = "select uv from UserVote uv left join fetch uv.restaurant as restaurants where " +
+            "uv.user.id=:id and uv.date=:date")
+    UserVote findByDateEquals(@Param(value = "date") LocalDate date,@Param(value = "id") int userId);
 }

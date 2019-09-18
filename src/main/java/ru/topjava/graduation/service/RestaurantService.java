@@ -13,7 +13,6 @@ import static ru.topjava.graduation.util.ValidationUtil.*;
 
 @Service
 public class RestaurantService {
-    //TODO ПЕРЕПИЛИТЬ ВСЕ ВОЗВРАЩАЕМЫЕ ОБЪЕКТЫ НА ТО
 
     private RestaurantRepository repository;
 

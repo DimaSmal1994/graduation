@@ -22,7 +22,7 @@ public class AdminController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
 
-    static final String ADMIN_URL = "rest/admin";
+    static final String ADMIN_URL = "admin";
 
     private RestaurantService restaurantService;
 

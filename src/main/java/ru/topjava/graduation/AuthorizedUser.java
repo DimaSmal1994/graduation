@@ -7,7 +7,6 @@ import ru.topjava.graduation.model.User;
 import java.util.Objects;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
-    //TODO разберись че к чему здесь
     private static final long serialVersionUID = 1L;
 
     private User user;
