@@ -5,49 +5,70 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.topjava.graduation.model.Dish;
+import ru.topjava.graduation.model.Restaurant;
 import ru.topjava.graduation.repository.DishRepository;
+import ru.topjava.graduation.repository.RestaurantRepository;
+import ru.topjava.graduation.to.DishTo;
+
 import java.util.List;
 
 import static ru.topjava.graduation.util.ValidationUtil.*;
 
 @Service
 public class DishService {
-    private DishRepository repository;
+    private DishRepository dishRepository;
+
+    private RestaurantRepository restaurantRepository;
 
     public DishService() {
     }
 
     @Autowired
-    public void setRepository(DishRepository repository) {
-        this.repository = repository;
+    public void setDishRepository(DishRepository repository) {
+        this.dishRepository = repository;
     }
 
     @Transactional
-    public Dish save(Dish dish) {
-        Assert.notNull(dish, "dish must not be null");
-        return repository.save(dish);
+    public DishTo save(DishTo dishTo) {
+        Assert.notNull(dishTo, "dish must not be null");
+        Restaurant restaurant = restaurantRepository.findById(dishTo.getRestaurantId()).orElse(null);
+        Dish dish = DishTo.createNewDishFromTo(dishTo, checkIsNotFoundWithId(restaurant, dishTo.getRestaurantId()));
+
+        return DishTo.asTo(dishRepository.save(dish));
     }
 
     @Transactional
     public Dish getById(Integer id){
-        return checkIsNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkIsNotFoundWithId(dishRepository.findById(id).orElse(null), id);
     }
 
     @Transactional
     public List<Dish> getAll(){
-        return repository.findAll();
+        return dishRepository.findAll();
     }
 
     @Transactional
     public void delete(Integer id){
-        checkNotFoundWithId(repository.existsById(id), id);
-        repository.deleteById(id);
+        checkNotFoundWithId(dishRepository.existsById(id), id);
+        dishRepository.deleteById(id);
     }
 
     @Transactional
-    public Dish update(Dish dish){
-        Assert.notNull(dish, "dish must not be null");
-        return repository.save(dish);
+    public DishTo update(DishTo dishTo){
+        Assert.notNull(dishTo, "dishTo must not be null");
+        checkIsNotFoundWithId(dishTo, dishTo.getId());
+
+        Dish dishToUpdate = DishTo.createNewDishFromTo(dishTo,
+                restaurantRepository.findById(dishTo.getRestaurantId()).orElse(null));
+        Dish savedDish = dishRepository.save(dishToUpdate);
+
+        return DishTo.asTo(savedDish);
+    }
+
+    @Transactional
+    public List<DishTo> getAllByRestaurantId(int id){
+        List<DishTo> result = DishTo.asToList(dishRepository.getAllByRestaurantId(id));
+        return checkIsNotFoundWithId(result, id);
     }
 
 
