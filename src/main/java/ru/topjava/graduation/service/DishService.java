@@ -9,10 +9,13 @@ import ru.topjava.graduation.model.Restaurant;
 import ru.topjava.graduation.repository.DishRepository;
 import ru.topjava.graduation.repository.RestaurantRepository;
 import ru.topjava.graduation.to.DishTo;
+import ru.topjava.graduation.util.exception.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
-import static ru.topjava.graduation.util.ValidationUtil.*;
+import static ru.topjava.graduation.util.ValidationUtil.checkIsNotFoundWithId;
+import static ru.topjava.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class DishService {
@@ -38,8 +41,16 @@ public class DishService {
     }
 
     @Transactional
-    public Dish getById(Integer id){
-        return checkIsNotFoundWithId(dishRepository.findById(id).orElse(null), id);
+    public DishTo getById(Integer id){
+        Optional<Dish> byId = dishRepository.findById(id);
+        Dish dish;
+        if (byId.isPresent()){
+            dish = checkIsNotFoundWithId(byId.get(), id);
+        } else {
+            throw new NotFoundException("Dish with id="+id+" is not found");
+        }
+
+        return DishTo.asTo(dish);
     }
 
     @Transactional

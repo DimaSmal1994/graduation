@@ -25,4 +25,8 @@ public interface UserVoteRepository extends JpaRepository<UserVote, Integer> {
     @Query(value = "select uv from UserVote uv left join fetch uv.restaurant as restaurants where " +
             "uv.user.id=:id and uv.date=:date")
     UserVote findByDateEquals(@Param(value = "date") LocalDate date,@Param(value = "id") int userId);
+
+    @Query(value = "select uv from UserVote uv left join fetch uv.restaurant as restaurants " +
+            "left join fetch uv.user as users where uv.date=:date order by uv.restaurant asc")
+    List<UserVote> findAllByDateOrderByRestaurant(@Param("date") LocalDate date);
 }

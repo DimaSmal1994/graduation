@@ -3,6 +3,7 @@ package ru.topjava.graduation.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.topjava.graduation.model.Restaurant;
 import ru.topjava.graduation.service.DishService;
 import ru.topjava.graduation.service.RestaurantService;
+import ru.topjava.graduation.service.UserVoteService;
 import ru.topjava.graduation.to.DishTo;
+import ru.topjava.graduation.to.UserVoteTo;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.topjava.graduation.util.ValidationUtil.checkIdConsistent;
@@ -30,6 +34,13 @@ public class AdminController {
     private RestaurantService restaurantService;
 
     private DishService dishService;
+
+    private UserVoteService userVoteService;
+
+    @Autowired
+    public void setUserVoteService(UserVoteService userVoteService) {
+        this.userVoteService = userVoteService;
+    }
 
     @Autowired
     public void setRestaurantService(RestaurantService restaurantService) {
@@ -126,5 +137,22 @@ public class AdminController {
         DishTo updatedDish = dishService.update(dishTo);
 
         return ResponseEntity.ok(updatedDish);
+    }
+
+    @GetMapping(value = "/dishes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DishTo> getDishById(@PathVariable("id") int id){
+        LOG.info("get dish with id={}",id);
+        DishTo dishTo = dishService.getById(id);
+
+        return ResponseEntity.ok(dishTo);
+    }
+
+    @GetMapping(value = "/votes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserVoteTo>> getAllVotesByDate(
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date){
+        LOG.info("get all votes by date={}",date);
+        List<UserVoteTo> votes = userVoteService.getFilteredByDate(date);
+
+        return ResponseEntity.ok(votes);
     }
 }

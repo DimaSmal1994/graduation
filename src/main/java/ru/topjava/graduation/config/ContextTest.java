@@ -1,17 +1,18 @@
 package ru.topjava.graduation.config;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.topjava.graduation.model.Dish;
 import ru.topjava.graduation.model.Restaurant;
 import ru.topjava.graduation.service.DishService;
 import ru.topjava.graduation.service.RestaurantService;
+import ru.topjava.graduation.to.DishTo;
 
 import java.util.ArrayList;
 
 public class ContextTest {
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(AppConfig.class, SecurityConfig.class, WebConfig.class);
+        context.refresh();
 
 //        for (String currentBean : context.getBeanDefinitionNames()) {
 //            System.out.println(currentBean);
@@ -25,7 +26,7 @@ public class ContextTest {
 
 //        DishRepository dishRepository = context.getBean(DishRepository.class);
         DishService dishService = context.getBean(DishService.class);
-        int id = dishService.save(new Dish("steak", 800, savedRestaurant)).getId();
+        int id = dishService.save(new DishTo(null,"steak", 1100, 9)).getId();
         System.out.println(dishService.getById(id));
     }
 }

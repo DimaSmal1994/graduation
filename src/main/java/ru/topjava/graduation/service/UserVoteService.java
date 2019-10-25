@@ -82,4 +82,12 @@ public class UserVoteService {
 
         return UserVoteTo.asToForUser(todayVote);
     }
+
+    @Transactional
+    public List<UserVoteTo> getFilteredByDate(LocalDate date){
+        Assert.notNull(date, "date must not be null");
+        List<UserVote> userVotes = userVoteRepository.findAllByDateOrderByRestaurant(date);
+
+        return UserVoteTo.asToList(userVotes);
+    }
 }
